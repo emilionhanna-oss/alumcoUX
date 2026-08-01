@@ -1,5 +1,15 @@
+# Etapa 1: compilar los assets con Node
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Etapa 2: imagen final con PHP + Nginx
 FROM richarvey/nginx-php-fpm:3.1.6
 COPY . .
+COPY --from=build /app/public/build ./public/build
 
 ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
