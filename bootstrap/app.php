@@ -20,6 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->trustProxies(   // ← NUEVO
+            at: '*',                  // ← NUEVO
+            headers: Request::HEADER_X_FORWARDED_FOR |   // ← NUEVO
+                Request::HEADER_X_FORWARDED_HOST |         // ← NUEVO
+                Request::HEADER_X_FORWARDED_PORT |         // ← NUEVO
+                Request::HEADER_X_FORWARDED_PROTO          // ← NUEVO
+        );                             // ← NUEVO
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
